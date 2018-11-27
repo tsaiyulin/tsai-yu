@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \blog\Console\Commands\getCURL::class,
-        \blog\Console\Commands\insertorigindata::class
+        \blog\Console\Commands\insertorigindata::class,
+        \blog\Console\Commands\insertnewdata::class
     ];
 
     /**

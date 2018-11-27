@@ -14,7 +14,7 @@ class getCURL extends Command
      *
      * @var string
      */
-    protected $signature = 'getCURL {http}{start}{end}{from}';
+    protected $signature = 'getCURL {http}{start}{end}{from}{method}';
 
     /**
      * The console command description.
@@ -44,9 +44,14 @@ class getCURL extends Command
         $argstart = $this->argument('start');
         $argend = $this->argument('end');
         $argfrom = $this->argument('from');
+        $argmethod = $this->argument('method');
         $response = Curl::to($arghttp."?start=".$argstart."&end=".$argend."&from=".$argfrom)->get();
         $array = json_decode($response, true);
         $alldata = ($array['hits']['hits']);
-        Artisan::call('insertorigindata', array('alldata' => $alldata));
+        if ($argmethod == 'insert') {
+            Artisan::call('insertorigindata', array('alldata' => $alldata));
+        } else {
+            Artisan::call('insertnewdata', array('alldata' => $alldata));
+        }
     }
 }
