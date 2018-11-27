@@ -11,14 +11,14 @@ class insertdata extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'insert';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = '新增資料到db';
 
     /**
      * Create a new command instance.

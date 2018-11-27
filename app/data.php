@@ -3,7 +3,7 @@
 namespace blog;
 
 use Illuminate\Database\Eloquent\Model;
-class newproject extends Model
+class data extends Model
 {
     protected $table = "data";
 }

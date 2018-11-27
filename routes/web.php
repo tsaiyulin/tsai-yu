@@ -15,3 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('get-curl', 'test@getCURL');
+Route::get('insertdata', 'test@insertdata');
+Route::get('newdata', 'test@modifydata');
