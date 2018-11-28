@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \blog\Console\Commands\getCURL::class,
+        \blog\Console\Commands\GetTrainData::class,
         \blog\Console\Commands\insertorigindata::class,
         \blog\Console\Commands\insertnewdata::class,
         \blog\Console\Commands\Max::class

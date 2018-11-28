@@ -3,7 +3,7 @@
 namespace blog;
 
 use Illuminate\Database\Eloquent\Model;
-class data extends Model
+class Data extends Model
 {
     protected $table = "data";
     public $timestamps = false;

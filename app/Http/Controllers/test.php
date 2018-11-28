@@ -9,7 +9,7 @@ use blog\newdata;
 use Carbon\Carbon;
 use Artisan;
 
-class test extends Controller
+class Test extends Controller
 {
     /**
      * Show the application dashboard.
@@ -18,8 +18,8 @@ class test extends Controller
      */
     public function getCURL()
     {
-         Artisan::call('Max', array('table' => 'newdata', 'col' => 'size', 'num' => '10'));
-        // Artisan::call('gettraindata', array('start' => '2018-11-23T10:11:11', 'end' => '2018-11-23T10:12:00', 'from' => '0', '--method' => 'newdatainsert'));
+         // Artisan::call('Max', array('table' => 'newdata', 'col' => 'size', 'num' => '10'));
+        Artisan::call('gettraindata', array('start' => '2018-11-23T10:11:11', 'end' => '2018-11-23T10:12:00', 'from' => '0', '--method' => 'insert'));
     }
     public function insertdata()
     {

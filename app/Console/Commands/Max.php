@@ -42,17 +42,17 @@ class Max extends Command
      */
     public function handle()
     {
-        $argtable = $this->argument('table');
-        $argcol = $this->argument('col');
-        $argnum = $this->argument('num');
-        if ($argtable == 'data') {
-            $maxdata = data::all()->sortByDesc($argcol)->take($argnum);
+        $argTable = $this->argument('table');
+        $argCol = $this->argument('col');
+        $argNum = $this->argument('num');
+        if ($argTable == 'data') {
+            $maxData = data::all()->sortByDesc($argCol)->take($argNum);
             echo "<pre>";
-            print_r($maxdata);
-        } else if($argtable == 'newdata') {
-            $maxdata = newdata::all()->sortByDesc($argcol)->take($argnum);
+            print_r($maxData);
+        } else if($argTable == 'newdata') {
+            $maxData = newdata::all()->sortByDesc($argCol)->take($argNum);
             echo "<pre>";
-            print_r($maxdata);
+            print_r($maxData);
         } else {
             print_r('error');
         }
