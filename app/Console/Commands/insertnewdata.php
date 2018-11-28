@@ -8,6 +8,7 @@ use Ixudra\Curl\Facades\Curl;
 use Artisan;
 use blog\newdata;
 use Carbon\Carbon;
+use blog\Repositories\newdataRepository;
 
 class insertnewdata extends Command
 {
@@ -30,9 +31,12 @@ class insertnewdata extends Command
      *
      * @return void
      */
-    public function __construct()
+    protected $dataRepository;
+
+    public function __construct(newdataRepository $newdataRepository)
     {
         parent::__construct();
+        $this->newdataRepository = $newdataRepository;
     }
 
     /**
@@ -46,30 +50,8 @@ class insertnewdata extends Command
         foreach ($alldata as $value) {
             $dt = Carbon::createFromFormat('Y-m-d\TH:i:s.uuP', $value['_source']['@timestamp']);
             $datetime = $dt -> toDateTimeString();
-            $insertnewdata = newdata::updateOrCreate(
-                [
-                    '_id' => $value['_id']
-                ],[
-                    '_index' => $value['_index'],
-                    '_type' => $value['_type'],
-                    '_id' => $value['_id'],
-                    '_score' => $value['_score'],
-                    'server_name' => $value['_source']['server_name'],
-                    'remote' => $value['_source']['remote'],
-                    'route' => $value['_source']['route'],
-                    'route_path' => $value['_source']['route_path'],
-                    'request_method' => $value['_source']['request_method'],
-                    'user' => $value['_source']['user'],
-                    'http_args' => $value['_source']['http_args'],
-                    'log_id' => $value['_source']['log_id'],
-                    'status' => $value['_source']['status'],
-                    'size' => $value['_source']['size'],
-                    'referer' => $value['_source']['referer'],
-                    'user_agent' => $value['_source']['user_agent'],
-                    'datetime' => $datetime,
-                    'sort' => $value['sort'][0],
-                ]
-            );
+            $value['_source']['@timestamp'] = $datetime;
+            $insertnewdata = $this->newdataRepository->insert($value);
         }
     }
 }

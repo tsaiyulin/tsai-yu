@@ -61,29 +61,8 @@ class getCURL extends Command
                 Artisan::call('insertnewdata', array('alldata' => $alldata));
             } else {
                 echo "<pre>";
-                // print_r($alldata);
-                // foreach ($alldata as $value) {
-                $dt = Carbon::createFromFormat('Y-m-d\TH:i:s.uuP', '2018-11-23T10:11:11.000000000+08:00');
-                // $a = '2018-11-23T10:11:11.000000000+08:00'->toDateTimeString();
-                $datetime = $dt -> toDateTimeString();
-                print_r($datetime);
-                exit;
-            // }
+                print_r($alldata);
             }
         }
-        // $response = Curl::to("http://train.rd6?start=".$argstart."&end=".$argend."&from=".$argfrom)->get();
-        // $array = json_decode($response, true);
-        // echo "<pre>";
-        // print_r($array);
-        // exit;
-        // $alldata = ($array['hits']['hits']);
-        // if ($argmethod == 'insert') {
-        //     Artisan::call('insertorigindata', array('alldata' => $alldata));
-        // } else if ($argmethod == 'newdatainsert') {
-        //     Artisan::call('insertnewdata', array('alldata' => $alldata));
-        // } else {
-        //     echo "<pre>";
-        //     print_r($alldata);
-        // }
     }
 }

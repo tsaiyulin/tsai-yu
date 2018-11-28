@@ -45,6 +45,16 @@ class Max extends Command
         $argtable = $this->argument('table');
         $argcol = $this->argument('col');
         $argnum = $this->argument('num');
-        $maxdata = $argtable::all()->sortBy($argcol)->max($argnum)->get();
+        if ($argtable == 'data') {
+            $maxdata = data::all()->sortByDesc($argcol)->take($argnum);
+            echo "<pre>";
+            print_r($maxdata);
+        } else if($argtable == 'newdata') {
+            $maxdata = newdata::all()->sortByDesc($argcol)->take($argnum);
+            echo "<pre>";
+            print_r($maxdata);
+        } else {
+            print_r('error');
+        }
     }
 }
