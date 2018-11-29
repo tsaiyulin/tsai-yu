@@ -13,9 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \blog\Console\Commands\GetTrainData::class,
-        \blog\Console\Commands\insertorigindata::class,
-        \blog\Console\Commands\insertnewdata::class,
+        \blog\Console\Commands\TrainData::class,
+        \blog\Console\Commands\origindata::class,
+        \blog\Console\Commands\newdataGet::class,
         \blog\Console\Commands\Max::class
     ];
 

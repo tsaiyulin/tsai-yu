@@ -9,7 +9,7 @@ use Artisan;
 use blog\data;
 use blog\Repositories\dataRepository;
 
-class InsertOrigindata extends Command
+class Origindata extends Command
 {
     /**
      * The name and signature of the console command.
@@ -46,8 +46,8 @@ class InsertOrigindata extends Command
     public function handle()
     {
         $allData = $this->argument('alldata');
-        foreach ($allData as $value) {
-            $insert = $this->dataRepository->insertorigindata($value);
+        foreach ($allData as $data) {
+            $insert = $this->dataRepository->insertOrigindata($data);
         }
     }
 }

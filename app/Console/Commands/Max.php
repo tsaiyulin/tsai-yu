@@ -57,6 +57,6 @@ class Max extends Command
         } else {
             $maxData = 'error';
         }
-        return $maxData;
+        return ($maxData);
     }
 }

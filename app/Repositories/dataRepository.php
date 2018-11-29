@@ -21,32 +21,34 @@ class DataRepository
     /**
      * @return Collection
      */
-    public function insertOrigindata($allData)
+    public function insertOrigindata($alldata)
     {
-        return $this->data::updateOrCreate(
-            [
-                '_id' => $allData['_id']
-            ],[
-                '_index' => $allData['_index'],
-                '_type' => $allData['_type'],
-                '_id' => $allData['_id'],
-                '_score' => $allData['_score'],
-                'server_name' => $allData['_source']['server_name'],
-                'remote' => $allData['_source']['remote'],
-                'route' => $allData['_source']['route'],
-                'route_path' => $allData['_source']['route_path'],
-                'request_method' => $allData['_source']['request_method'],
-                'user' => $allData['_source']['user'],
-                'http_args' => $allData['_source']['http_args'],
-                'log_id' => $allData['_source']['log_id'],
-                'status' => $allData['_source']['status'],
-                'size' => $allData['_source']['size'],
-                'referer' => $allData['_source']['referer'],
-                'user_agent' => $allData['_source']['user_agent'],
-                'timestamp' => $allData['_source']['@timestamp'],
-                'sort' => $allData['sort'][0],
-            ]
-        );
+        foreach ($alldata as $eachdata) {
+            $this->data::updateOrCreate(
+                [
+                    '_id' => $eachdata['_id']
+                ],[
+                    '_index' => $eachdata['_index'],
+                    '_type' => $eachdata['_type'],
+                    '_id' => $eachdata['_id'],
+                    '_score' => $eachdata['_score'],
+                    'server_name' => $eachdata['_source']['server_name'],
+                    'remote' => $eachdata['_source']['remote'],
+                    'route' => $eachdata['_source']['route'],
+                    'route_path' => $eachdata['_source']['route_path'],
+                    'request_method' => $eachdata['_source']['request_method'],
+                    'user' => $eachdata['_source']['user'],
+                    'http_args' => $eachdata['_source']['http_args'],
+                    'log_id' => $eachdata['_source']['log_id'],
+                    'status' => $eachdata['_source']['status'],
+                    'size' => $eachdata['_source']['size'],
+                    'referer' => $eachdata['_source']['referer'],
+                    'user_agent' => $eachdata['_source']['user_agent'],
+                    'timestamp' => $eachdata['_source']['@timestamp'],
+                    'sort' => $eachdata['sort'][0],
+                ]
+            );
+        }
     }
     public function getMaxData($argCol, $argNum)
     {

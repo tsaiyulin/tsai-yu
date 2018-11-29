@@ -10,7 +10,7 @@ use blog\newdata;
 use Carbon\Carbon;
 use blog\Jobs\getdata;
 
-class GetTrainData extends Command
+class TrainData extends Command
 {
     /**
      * The name and signature of the console command.
@@ -48,11 +48,11 @@ class GetTrainData extends Command
         $argFrom = $this->argument('from');
         $argMethod = $this->option('method');
         $response = Curl::to("http://train.rd6?start=" . $argStart . "&end=" . $argEnd . "&from=" . $argFrom)->get();
-            $responsearray = json_decode($response, true);
-            $totalData = $responsearray['hits']['total'];
-                for ($argFrom = 0; $argFrom < $totalData; $argFrom += 10000) {
-                    $job = new getdata($argStart, $argEnd, $argFrom, $argMethod);
-                    dispatch($job);
-                }
+        $responsearray = json_decode($response, true);
+        $totalData = $responsearray['hits']['total'];
+        for ($argFrom = 0; $argFrom < $totalData; $argFrom += 10000) {
+            $job = new getdata($argStart, $argEnd, $argFrom, $argMethod);
+            dispatch($job);
+        }
     }
 }

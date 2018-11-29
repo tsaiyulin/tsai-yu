@@ -10,7 +10,7 @@ use blog\newdata;
 use Carbon\Carbon;
 use blog\Repositories\newdataRepository;
 
-class InsertNewdata extends Command
+class NewdataGet extends Command
 {
     /**
      * The name and signature of the console command.
@@ -47,11 +47,11 @@ class InsertNewdata extends Command
     public function handle()
     {
         $allData = $this->argument('alldata');
-        foreach ($allData as $value) {
-            $dt = Carbon::createFromFormat('Y-m-d\TH:i:s.uuP', $value['_source']['@timestamp']);
-            $datetime = $dt -> toDateTimeString();
-            $value['_source']['@timestamp'] = $datetime;
-            $insertNewdata = $this->newdataRepository->insert($value);
+        foreach ($allData as $data) {
+            $dt = Carbon::createFromFormat('Y-m-d\TH:i:s.uuP', $data['_source']['@timestamp']);
+            $datetime = $dt->toDateTimeString();
+            $data['_source']['@timestamp'] = $datetime;
+            $insertNewdata = $this->newdataRepository->insertNewData($data);
         }
     }
 }
