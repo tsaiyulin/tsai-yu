@@ -43,4 +43,8 @@ class NewdataRepository
             ]
         );
     }
+    public function getMaxData($argCol, $argNum)
+    {
+        return $this->newdata::all()->sortByDesc($argCol)->take($argNum);
+    }
 }

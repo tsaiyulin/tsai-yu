@@ -8,6 +8,7 @@ use Ixudra\Curl\Facades\Curl;
 use Artisan;
 use blog\newdata;
 use Carbon\Carbon;
+use blog\Jobs\getdata;
 
 class GetTrainData extends Command
 {
@@ -46,21 +47,12 @@ class GetTrainData extends Command
         $argEnd = $this->argument('end');
         $argFrom = $this->argument('from');
         $argMethod = $this->option('method');
-        $response = Curl::to("http://train.rd6?start=".$argStart."&end=".$argEnd."&from=".$argFrom)->get();
-            $array = json_decode($response, true);
-            $totalData = ($array['hits']['total']);
+        $response = Curl::to("http://train.rd6?start=" . $argStart . "&end=" . $argEnd . "&from=" . $argFrom)->get();
+            $responsearray = json_decode($response, true);
+            $totalData = $responsearray['hits']['total'];
                 for ($argFrom = 0; $argFrom < $totalData; $argFrom += 10000) {
-                    $response = Curl::to("http://train.rd6?start=".$argStart."&end=".$argEnd."&from=".$argFrom)->get();
-                    $array = json_decode($response, true);
-                    $allData = $array['hits']['hits'];
-                    if ($argMethod == 'insert') {
-                        Artisan::call('insertorigindata', array('alldata' => $allData));
-                    } else if ($argMethod == 'newdatainsert') {
-                        Artisan::call('insertnewdata', array('alldata' => $allData));
-                    } else {
-                        echo "<pre>";
-                        print_r($allData);
-                    }
-        }
+                    $job = new getdata($argStart, $argEnd, $argFrom, $argMethod);
+                    dispatch($job);
+                }
     }
 }

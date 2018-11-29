@@ -48,4 +48,8 @@ class DataRepository
             ]
         );
     }
+    public function getMaxData($argCol, $argNum)
+    {
+        return $this->data::all()->sortByDesc($argCol)->take($argNum);
+    }
 }

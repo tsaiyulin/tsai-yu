@@ -8,6 +8,8 @@ use Ixudra\Curl\Facades\Curl;
 use Artisan;
 use blog\newdata;
 use blog\data;
+use blog\Repositories\newdataRepository;
+use blog\Repositories\dataRepository;
 
 class Max extends Command
 {
@@ -24,15 +26,18 @@ class Max extends Command
      * @var string
      */
     protected $description = '取出最大值';
-
+    protected $dataRepository;
+    protected $newdataRepository;
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(newdataRepository $newdataRepository, dataRepository $dataRepository)
     {
         parent::__construct();
+        $this->dataRepository = $dataRepository;
+        $this->newdataRepository = $newdataRepository;
     }
 
     /**
@@ -46,15 +51,12 @@ class Max extends Command
         $argCol = $this->argument('col');
         $argNum = $this->argument('num');
         if ($argTable == 'data') {
-            $maxData = data::all()->sortByDesc($argCol)->take($argNum);
-            echo "<pre>";
-            print_r($maxData);
+            $maxData = $this->dataRepository->getMaxData($argCol, $argNum);
         } else if($argTable == 'newdata') {
-            $maxData = newdata::all()->sortByDesc($argCol)->take($argNum);
-            echo "<pre>";
-            print_r($maxData);
+            $maxData = $this->newdataRepository->getMaxData($argCol, $argNum);
         } else {
-            print_r('error');
+            $maxData = 'error';
         }
+        return $maxData;
     }
 }
