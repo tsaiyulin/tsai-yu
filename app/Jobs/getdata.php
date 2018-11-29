@@ -48,7 +48,7 @@ class getdata implements ShouldQueue
         $responsearray = json_decode($response, true);
         $allData = $responsearray['hits']['hits'];
         if ($this->argMethod == 'insert') {
-                $response = $dataRepository->insertOrigindata($allData);
+            $response = $dataRepository->insertOrigindata($allData);
         } else if ($this->argMethod == 'newdatainsert') {
             $response = $newdataRepository->insertNewdata($allData);
         } else {

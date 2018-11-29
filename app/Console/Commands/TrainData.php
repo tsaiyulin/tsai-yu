@@ -4,11 +4,8 @@ namespace blog\Console\Commands;
 
 use Illuminate\Console\Command;
 use File;
-use Ixudra\Curl\Facades\Curl;
-use Artisan;
-use blog\newdata;
-use Carbon\Carbon;
-use blog\Jobs\getdata;
+use blog\Services\TotalDataServices;
+use blog\Services\JobServices;
 
 class TrainData extends Command
 {
@@ -25,15 +22,18 @@ class TrainData extends Command
      * @var string
      */
     protected $description = '取train.rd6資料';
+    protected $totalData;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(TotalDataServices $TotalDataServices, JobServices $JobServices)
     {
         parent::__construct();
+        $this->TotalDataServices = $TotalDataServices;
+        $this->JobServices = $JobServices;
     }
 
     /**
@@ -47,12 +47,7 @@ class TrainData extends Command
         $argEnd = $this->argument('end');
         $argFrom = $this->argument('from');
         $argMethod = $this->option('method');
-        $response = Curl::to("http://train.rd6?start=" . $argStart . "&end=" . $argEnd . "&from=" . $argFrom)->get();
-        $responsearray = json_decode($response, true);
-        $totalData = $responsearray['hits']['total'];
-        for ($argFrom = 0; $argFrom < $totalData; $argFrom += 10000) {
-            $job = new getdata($argStart, $argEnd, $argFrom, $argMethod);
-            dispatch($job);
-        }
+        $totalDataNum = $this->TotalDataServices->getData($argStart, $argEnd, $argFrom);
+        $callJob = $this->JobServices->callJob($argStart, $argEnd, $argFrom, $totalDataNum, $argMethod);
     }
 }
