@@ -3,31 +3,31 @@
 namespace blog\Services;
 
 use Ixudra\Curl\Facades\Curl;
-use blog\Repositories\newdataRepository;
+use blog\Repositories\newDataRepository;
 use blog\Repositories\dataRepository;
 
 class TotalDataServices
 {
-    protected $newdataRepository;
+    protected $newDataRepository;
     protected $dataRepository;
-    public function __construct(dataRepository $dataRepository, newdataRepository $newdataRepository)
+    public function __construct(dataRepository $dataRepository, newDataRepository $newDataRepository)
     {
         $this->dataRepository = $dataRepository;
-        $this->newdataRepository = $newdataRepository;
+        $this->newDataRepository = $newDataRepository;
     }
-    public function getData($argStart, $argEnd, $argFrom)
+    public function getDataNum($argStart, $argEnd, $argFrom)
     {
         $response = Curl::to("http://train.rd6?start=" . $argStart . "&end=" . $argEnd . "&from=" . $argFrom)->get();
         $responsearray = json_decode($response, true);
-        $totalData = $responsearray['hits']['total'];
-        return $totalData;
+        $totalDataNum = $responsearray['hits']['total'];
+        return $totalDataNum;
     }
     public function insertOriginData($allData)
     {
-        $response = $this->dataRepository->insertOrigindata($allData);
+        $response = $this->dataRepository->insertOriginData($allData);
     }
     public function insertNewData($allData)
     {
-        $response = $this->newdataRepository->insertNewData($allData);
+        $response = $this->newDataRepository->insertNewData($allData);
     }
 }

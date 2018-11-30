@@ -4,10 +4,10 @@ namespace blog\Console\Commands;
 
 use Illuminate\Console\Command;
 use File;
-use blog\Services\TotalDataServices;
-use blog\Jobs\getdata;
+use blog\Services\totalDataServices;
+use blog\Jobs\getAllData;
 
-class TrainData extends Command
+class GetTrainData extends Command
 {
     /**
      * The name and signature of the console command.
@@ -22,17 +22,17 @@ class TrainData extends Command
      * @var string
      */
     protected $description = '取train.rd6資料';
-    protected $totalData;
+    protected $totalDataServices;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(TotalDataServices $TotalDataServices)
+    public function __construct(totalDataServices $totalDataServices)
     {
         parent::__construct();
-        $this->TotalDataServices = $TotalDataServices;
+        $this->totalDataServices = $totalDataServices;
     }
 
     /**
@@ -46,9 +46,9 @@ class TrainData extends Command
         $argEnd = $this->argument('end');
         $argFrom = $this->argument('from');
         $argMethod = $this->option('method');
-        $totalDataNum = $this->TotalDataServices->getData($argStart, $argEnd, $argFrom);
+        $totalDataNum = $this->totalDataServices->getDataNum($argStart, $argEnd, $argFrom);
         for ($argFrom = 0; $argFrom < $totalDataNum; $argFrom += 10000) {
-            $job = new getdata($argStart, $argEnd, $argFrom, $argMethod);
+            $job = new getAllData($argStart, $argEnd, $argFrom, $argMethod);
             dispatch($job);
         }
     }

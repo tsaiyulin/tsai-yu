@@ -14,10 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \blog\Console\Commands\TrainData::class,
-        // \blog\Console\Commands\origindata::class,
-        // \blog\Console\Commands\newdataGet::class,
-        // \blog\Console\Commands\Max::class
+        \blog\Console\Commands\gettraindata::class,
     ];
 
     /**
@@ -30,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         $start = Carbon::now()->subMinutes(10)->format('Y-m-d\TH:i:s');
         $end = Carbon::now()->subMinutes(9)->format('Y-m-d\TH:i:s');
-        $schedule->command('gettraindata', [$start, $end, '0', '--method'=>'insert'])->everyMinute();
+        $schedule->command('gettraindata', [$start, $end, '0', '--method'=>'insert'])->everyMinute();;
     }
 
     /**

@@ -9,10 +9,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Ixudra\Curl\Facades\Curl;
-use Artisan;
 use blog\Services\totalDataServices;
 
-class getdata implements ShouldQueue
+class GetAllData implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -25,7 +24,7 @@ class getdata implements ShouldQueue
     protected $argEnd;
     protected $argFrom;
     protected $argMethod;
-
+    protected $totalDataServices;
     public function __construct($argStart, $argEnd, $argFrom, $argMethod)
     {
         $this->argStart = $argStart;
@@ -39,24 +38,18 @@ class getdata implements ShouldQueue
      *
      * @return void
      */
-    protected $TotalDataServices;
     public function handle(totalDataServices $totalDataServices)
     {
         $this->totalDataServices = $totalDataServices;
         $response = Curl::to("http://train.rd6?start=" . $this->argStart . "&end=" . $this->argEnd . "&from=" . $this->argFrom)->get();
-        $responsearray = json_decode($response, true);
-        $allData = $responsearray['hits']['hits'];
+        $responseArray = json_decode($response, true);
+        $allData = $responseArray['hits']['hits'];
         if ($this->argMethod == 'insert') {
-            $response = $this->totalDataServices->insertOriginData($allData);
+            $insertOriginData = $this->totalDataServices->insertOriginData($allData);
         } else if ($this->argMethod == 'newdatainsert') {
-            $response = $this->totalDataServices->insertNewData($allData);
+            $insertNewData = $this->totalDataServices->insertNewData($allData);
         } else {
-            $response = $allData;
+            return $allData;
         }
-        return $response;
-    }
-    public function failed(Exception $exception)
-    {
-        // Send user notification of failure, etc...
     }
 }
