@@ -4,6 +4,7 @@ namespace blog\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,9 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \blog\Console\Commands\TrainData::class,
-        \blog\Console\Commands\origindata::class,
-        \blog\Console\Commands\newdataGet::class,
-        \blog\Console\Commands\Max::class
+        // \blog\Console\Commands\origindata::class,
+        // \blog\Console\Commands\newdataGet::class,
+        // \blog\Console\Commands\Max::class
     ];
 
     /**
@@ -27,8 +28,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $start = Carbon::now()->subMinutes(10)->format('Y-m-d\TH:i:s');
+        $end = Carbon::now()->subMinutes(9)->format('Y-m-d\TH:i:s');
+        $schedule->command('gettraindata', [$start, $end, '0', '--method'=>'insert'])->everyMinute();
     }
 
     /**
