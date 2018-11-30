@@ -5,7 +5,7 @@ namespace blog\Console\Commands;
 use Illuminate\Console\Command;
 use File;
 use blog\Services\TotalDataServices;
-use blog\Services\JobServices;
+use blog\Jobs\getdata;
 
 class TrainData extends Command
 {
@@ -29,11 +29,10 @@ class TrainData extends Command
      *
      * @return void
      */
-    public function __construct(TotalDataServices $TotalDataServices, JobServices $JobServices)
+    public function __construct(TotalDataServices $TotalDataServices)
     {
         parent::__construct();
         $this->TotalDataServices = $TotalDataServices;
-        $this->JobServices = $JobServices;
     }
 
     /**
@@ -48,6 +47,9 @@ class TrainData extends Command
         $argFrom = $this->argument('from');
         $argMethod = $this->option('method');
         $totalDataNum = $this->TotalDataServices->getData($argStart, $argEnd, $argFrom);
-        $callJob = $this->JobServices->callJob($argStart, $argEnd, $argFrom, $totalDataNum, $argMethod);
+        for ($argFrom = 0; $argFrom < $totalDataNum; $argFrom += 10000) {
+            $job = new getdata($argStart, $argEnd, $argFrom, $argMethod);
+            dispatch($job);
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace blog\Repositories;
 
 use blog\newdata;
+use Carbon\Carbon;
 
 class NewdataRepository
 {

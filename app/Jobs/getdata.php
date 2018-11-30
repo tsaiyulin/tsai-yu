@@ -10,8 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Ixudra\Curl\Facades\Curl;
 use Artisan;
-use blog\Repositories\newdataRepository;
-use blog\Repositories\dataRepository;
+use blog\Services\totalDataServices;
 
 class getdata implements ShouldQueue
 {
@@ -40,19 +39,19 @@ class getdata implements ShouldQueue
      *
      * @return void
      */
-    protected $dataRepository;
-    protected $newdataRepository;
-    public function handle(newdataRepository $newdataRepository, dataRepository $dataRepository)
+    protected $TotalDataServices;
+    public function handle(totalDataServices $totalDataServices)
     {
+        $this->totalDataServices = $totalDataServices;
         $response = Curl::to("http://train.rd6?start=" . $this->argStart . "&end=" . $this->argEnd . "&from=" . $this->argFrom)->get();
         $responsearray = json_decode($response, true);
         $allData = $responsearray['hits']['hits'];
         if ($this->argMethod == 'insert') {
-            $response = $dataRepository->insertOrigindata($allData);
+            $response = $this->totalDataServices->insertOriginData($allData);
         } else if ($this->argMethod == 'newdatainsert') {
-            $response = $newdataRepository->insertNewdata($allData);
+            $response = $this->totalDataServices->insertNewData($allData);
         } else {
-            $response =  $allData;
+            $response = $allData;
         }
         return $response;
     }
