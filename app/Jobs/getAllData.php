@@ -14,6 +14,7 @@ use blog\Services\totalDataServices;
 class GetAllData implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    public $timeout = 120;
 
     /**
      * Create a new job instance.
@@ -41,9 +42,7 @@ class GetAllData implements ShouldQueue
     public function handle(totalDataServices $totalDataServices)
     {
         $this->totalDataServices = $totalDataServices;
-        $response = Curl::to("http://train.rd6?start=" . $this->argStart . "&end=" . $this->argEnd . "&from=" . $this->argFrom)->get();
-        $responseArray = json_decode($response, true);
-        $allData = $responseArray['hits']['hits'];
+        $allData = $this->totalDataServices->getData($this->argStart, $this->argEnd, $this->argFrom);
         if ($this->argMethod == 'insert') {
             $insertOriginData = $this->totalDataServices->insertOriginData($allData);
         } else if ($this->argMethod == 'newdatainsert') {

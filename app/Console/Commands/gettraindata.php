@@ -14,14 +14,14 @@ class GetTrainData extends Command
      *
      * @var string
      */
-    protected $signature = 'gettraindata {start}{end}{from}{--method=}';
+    protected $signature = 'gettraindata {start}{end}{from}{--method=insert}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '取train.rd6資料';
+    protected $description = '取train.rd6資料,start:起始時間,end:結束時間,from:從第幾筆資料開始,method:存原始資料(insert)或存更改過的資料(newdatainsert)';
     protected $totalDataServices;
 
     /**

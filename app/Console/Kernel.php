@@ -25,9 +25,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $start = Carbon::now()->subMinutes(10)->format('Y-m-d\TH:i:s');
-        $end = Carbon::now()->subMinutes(9)->format('Y-m-d\TH:i:s');
-        $schedule->command('gettraindata', [$start, $end, '0', '--method'=>'insert'])->everyMinute();;
+        $start = Carbon::now('Asia/Taipei')->subMinutes(10)->format('Y-m-d\TH:i:s');
+        $end = Carbon::now('Asia/Taipei')->subMinutes(9)->format('Y-m-d\TH:i:s');
+        $schedule->command('gettraindata', [$start, $end, '0', '--method'=>'insert'])->everyMinute();
+        $schedule->command('gettraindata', [$start, $end, '0', '--method'=>'newdatainsert'])->everyMinute();
     }
 
     /**
