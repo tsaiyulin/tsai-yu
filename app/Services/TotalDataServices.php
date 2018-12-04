@@ -18,19 +18,12 @@ class TotalDataServices
         $this->dataRepository = $dataRepository;
         $this->newDataRepository = $newDataRepository;
     }
-    public function getDataNum($argStart, $argEnd, $argFrom)
+    public function getData($argStart, $argFrom)
     {
-        $response = Curl::to("http://train.rd6?start=" . $argStart . "&end=" . $argEnd . "&from=" . $argFrom)->get();
-        $responsearray = json_decode($response, true);
-        $totalDataNum = $responsearray['hits']['total'];
-        return $totalDataNum;
-    }
-    public function getData($argStart, $argEnd, $argFrom)
-    {
-        $response = Curl::to("http://train.rd6?start=" . $argStart . "&end=" . $argEnd . "&from=" . $argFrom)->get();
-        $responseArray = json_decode($response, true);
-        $allData = $responseArray['hits']['hits'];
-        return $allData;
+        $argEnd = clone $argStart;
+        $argEnd->add(new \DateInterval('PT1M'));
+        $response = Curl::to("http://train.rd6?start=" . $argStart->format('Y-m-d\TH:i:s') . "&end=" . $argEnd->format('Y-m-d\TH:i:s') . "&from=" . $argFrom)->get();
+        return $response;
     }
     public function insertOriginData($allData)
     {

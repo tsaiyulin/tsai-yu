@@ -30,7 +30,6 @@ class DataRepository
                 ],[
                     '_index' => $eachData['_index'],
                     '_type' => $eachData['_type'],
-                    '_id' => $eachData['_id'],
                     '_score' => $eachData['_score'],
                     'server_name' => $eachData['_source']['server_name'],
                     'remote' => $eachData['_source']['remote'],

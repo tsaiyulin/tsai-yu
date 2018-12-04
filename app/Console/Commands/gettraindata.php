@@ -7,6 +7,7 @@ use File;
 use blog\Services\totalDataServices;
 use blog\Jobs\getAllData;
 
+
 class GetTrainData extends Command
 {
     /**
@@ -14,15 +15,19 @@ class GetTrainData extends Command
      *
      * @var string
      */
-    protected $signature = 'gettraindata {start}{end}{from}{--method=insert}';
+    protected $signature = 'gettraindata {--s|start= : format: 2017-01-01T00:00:00}{--e|end= : format: 2017-01-01T00:00:59 :format: 2017-01-01T00:00:59}{--f|from=0}{--method=insert}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '取train.rd6資料,start:起始時間,end:結束時間,from:從第幾筆資料開始,method:存原始資料(insert)或存更改過的資料(newdatainsert)';
+    protected $description = '取train.rd6資料';
     protected $totalDataServices;
+    protected $argStart;
+    protected $argEnd;
+    protected $argFrom;
+    protected $argMethod;
 
     /**
      * Create a new command instance.
@@ -42,14 +47,36 @@ class GetTrainData extends Command
      */
     public function handle()
     {
-        $argStart = $this->argument('start');
-        $argEnd = $this->argument('end');
-        $argFrom = $this->argument('from');
-        $argMethod = $this->option('method');
-        $totalDataNum = $this->totalDataServices->getDataNum($argStart, $argEnd, $argFrom);
-        for ($argFrom = 0; $argFrom < $totalDataNum; $argFrom += 10000) {
-            $job = new getAllData($argStart, $argEnd, $argFrom, $argMethod);
+        $this->getOpt();
+        while($this->argStart <= $this->argEnd) {
+            $job = new getAllData($this->argStart, $this->argEnd, $this->argFrom, $this->argMethod);
             dispatch($job);
+            // startTime增加一分鐘
+            $this->argStart->add(new \DateInterval('PT1M'));
+        }
+    }
+    public function getOpt()
+    {
+        $argStart = $this->option('start');
+        $argEnd = $this->option('end');
+        $argFrom = $this->option('from');
+        $argMethod = $this->option('method');
+
+        $this->argStart = new \DateTime($argStart, new \DateTimeZone('Etc/GMT+4'));
+        $this->argEnd = new \DateTime($argEnd, new \DateTimeZone('Etc/GMT+4'));
+        $this->argFrom = $argFrom;
+        $this->argMethod = $argMethod;
+
+        // 沒指定時間，預設為 4 分鐘前
+        if (empty($argStart)) {
+            $this->argStart = new \DateTime('4 minutes ago', new \DateTimeZone('Asia/Taipei'));
+            $this->argStart->setTime($this->argStart->format('H'), $this->argStart->format('i'), 0);
+            $this->argStart->format('Y-m-d\TH:i:s');
+        }
+        if (empty($argEnd)) {
+            $this->argEnd = clone $this->argStart;
+            $this->argEnd->setTime($this->argStart->format('H'), $this->argStart->format('i'), 59);
+            $this->argEnd->format('Y-m-d\TH:i:s');
         }
     }
 }

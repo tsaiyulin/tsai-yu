@@ -42,7 +42,12 @@ class GetAllData implements ShouldQueue
     public function handle(totalDataServices $totalDataServices)
     {
         $this->totalDataServices = $totalDataServices;
-        $allData = $this->totalDataServices->getData($this->argStart, $this->argEnd, $this->argFrom);
+        $response = $this->totalDataServices->getData($this->argStart, $this->argFrom);
+        $responseArray = json_decode($response, true);
+        $allData = $responseArray['hits']['hits'];
+        if (empty($allData)) {
+            return;
+        }
         if ($this->argMethod == 'insert') {
             $insertOriginData = $this->totalDataServices->insertOriginData($allData);
         } else if ($this->argMethod == 'newdatainsert') {
@@ -50,5 +55,12 @@ class GetAllData implements ShouldQueue
         } else {
             return $allData;
         }
+        if ($this->argFrom == 0 && $this->argFrom < $responseArray['hits']['total']) {
+            for ($this->argFrom = 10000; $this->argFrom < $responseArray['hits']['total']; $this->argFrom += 10000) {
+                $job = (new getAllData($this->argStart, $this->argEnd, $this->argFrom, $this->argMethod));
+                dispatch($job);
+            }
+        }
+
     }
 }

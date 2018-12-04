@@ -29,7 +29,6 @@ class NewdataRepository
                 ],[
                     '_index' => $data['_index'],
                     '_type' => $data['_type'],
-                    '_id' => $data['_id'],
                     '_score' => $data['_score'],
                     'server_name' => $data['_source']['server_name'],
                     'remote' => $data['_source']['remote'],
