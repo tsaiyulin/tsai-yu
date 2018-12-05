@@ -15,7 +15,7 @@ class GetTrainData extends Command
      *
      * @var string
      */
-    protected $signature = 'gettraindata {--s|start= : format: 2017-01-01T00:00:00}{--e|end= : format: 2017-01-01T00:00:59 :format: 2017-01-01T00:00:59}{--f|from=0}{--method=insert}';
+    protected $signature = 'gettraindata {--s|start= : format: 2017-01-01T00:00:00}{--e|end= : format: 2017-01-01T00:00:59 :format: 2017-01-01T00:00:59}{--f|from=0}';
 
     /**
      * The console command description.
@@ -27,7 +27,6 @@ class GetTrainData extends Command
     protected $argStart;
     protected $argEnd;
     protected $argFrom;
-    protected $argMethod;
 
     /**
      * Create a new command instance.
@@ -49,7 +48,7 @@ class GetTrainData extends Command
     {
         $this->getOpt();
         while($this->argStart <= $this->argEnd) {
-            $job = new getAllData($this->argStart, $this->argEnd, $this->argFrom, $this->argMethod);
+            $job = new getAllData($this->argStart, $this->argEnd, $this->argFrom);
             dispatch($job);
             // startTime增加一分鐘
             $this->argStart->add(new \DateInterval('PT1M'));
@@ -60,12 +59,10 @@ class GetTrainData extends Command
         $argStart = $this->option('start');
         $argEnd = $this->option('end');
         $argFrom = $this->option('from');
-        $argMethod = $this->option('method');
 
         $this->argStart = new \DateTime($argStart, new \DateTimeZone('Etc/GMT+4'));
         $this->argEnd = new \DateTime($argEnd, new \DateTimeZone('Etc/GMT+4'));
         $this->argFrom = $argFrom;
-        $this->argMethod = $argMethod;
 
         // 沒指定時間，預設為 4 分鐘前
         if (empty($argStart)) {

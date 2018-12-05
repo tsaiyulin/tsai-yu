@@ -47,7 +47,9 @@ class DataRepository
                     'sort' => $eachData['sort'][0],
                 ]
             );
+            $processedData[] = $eachData;
         }
+        return $processedData;
     }
     public function getMaxData($argCol, $argNum)
     {

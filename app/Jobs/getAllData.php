@@ -24,14 +24,12 @@ class GetAllData implements ShouldQueue
     protected $argStart;
     protected $argEnd;
     protected $argFrom;
-    protected $argMethod;
     protected $totalDataServices;
-    public function __construct($argStart, $argEnd, $argFrom, $argMethod)
+    public function __construct($argStart, $argEnd, $argFrom)
     {
         $this->argStart = $argStart;
         $this->argEnd = $argEnd;
         $this->argFrom = $argFrom;
-        $this->argMethod = $argMethod;
     }
 
     /**
@@ -48,12 +46,9 @@ class GetAllData implements ShouldQueue
         if (empty($allData)) {
             return;
         }
-        if ($this->argMethod == 'insert') {
-            $insertOriginData = $this->totalDataServices->insertOriginData($allData);
-        } else if ($this->argMethod == 'newdatainsert') {
+        $insertOriginData = $this->totalDataServices->insertOriginData($allData);
+        if (!empty($insertOriginData)) {
             $insertNewData = $this->totalDataServices->insertNewData($allData);
-        } else {
-            return $allData;
         }
         if ($this->argFrom == 0 && $this->argFrom < $responseArray['hits']['total']) {
             for ($this->argFrom = 10000; $this->argFrom < $responseArray['hits']['total']; $this->argFrom += 10000) {

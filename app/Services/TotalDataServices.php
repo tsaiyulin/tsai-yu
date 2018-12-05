@@ -28,6 +28,7 @@ class TotalDataServices
     public function insertOriginData($allData)
     {
         $response = $this->dataRepository->insertOriginData($allData);
+        return $response;
     }
     public function insertNewData($allData)
     {

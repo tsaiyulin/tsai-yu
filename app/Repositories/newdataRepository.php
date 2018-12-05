@@ -46,7 +46,9 @@ class NewdataRepository
                     'sort' => $data['sort'][0],
                 ]
             );
+            $processedData[] = $data;
         }
+        return $processedData;
     }
     public function getMaxData($argCol, $argNum)
     {
