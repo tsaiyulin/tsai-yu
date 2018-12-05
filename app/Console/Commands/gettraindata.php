@@ -4,7 +4,6 @@ namespace blog\Console\Commands;
 
 use Illuminate\Console\Command;
 use File;
-use blog\Services\totalDataServices;
 use blog\Jobs\getAllData;
 
 
@@ -15,7 +14,7 @@ class GetTrainData extends Command
      *
      * @var string
      */
-    protected $signature = 'gettraindata {--s|start= : format: 2017-01-01T00:00:00}{--e|end= : format: 2017-01-01T00:00:59 :format: 2017-01-01T00:00:59}{--f|from=0}';
+    protected $signature = 'gettraindata {--s|start= : format: 2017-01-01T00:00:00}{--e|end= : format: 2017-01-01T00:00:59}{--f|from=0}';
 
     /**
      * The console command description.
@@ -23,7 +22,6 @@ class GetTrainData extends Command
      * @var string
      */
     protected $description = '取train.rd6資料';
-    protected $totalDataServices;
     protected $argStart;
     protected $argEnd;
     protected $argFrom;
@@ -33,10 +31,9 @@ class GetTrainData extends Command
      *
      * @return void
      */
-    public function __construct(totalDataServices $totalDataServices)
+    public function __construct()
     {
         parent::__construct();
-        $this->totalDataServices = $totalDataServices;
     }
 
     /**
